@@ -1,5 +1,11 @@
 from info import *
-def transcription(seq):
+
+def transcription(seq: str) -> str:
+    """
+    Replace all "T" characters with a single "U".
+    :param seq: a string of letters representing DNA nucleotides
+    :return: a string with all "T"s replaced by single "U"
+    """
     return seq.replace("T", "U")
 
 def reverse_compliment(seq):
