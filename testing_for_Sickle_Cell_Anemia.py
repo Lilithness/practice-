@@ -1,11 +1,14 @@
 import sys
 import functions
 
-def main(args:list) -> none:
+from typing import List
+
+
+def main(args: List[str]) -> None:
     """
-    assign the name of the file
-    :param: list that contains the name f the file
-    :return: none
+   ---
+    :param args: list that contains the name of the file
+    :return: None
     """
     filename = args[0]
 

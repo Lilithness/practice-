@@ -27,6 +27,7 @@ def translate(seq: str, init_pos=0) -> List[str]:
     Map nucleotide triplets (codons) to amino-acids, using IUPAC single-character representations.
 
     :param seq: a string of letters representing DNA nucleotides
+    :param init_pos: ---
     :return: a string representing the amino-acid sequence
     """
     return [
@@ -52,9 +53,9 @@ def gen_reading_frames(seq: str) -> List[List[str]]:
     ]
 
 
-def proteins_from_rf(aa_seq: str) -> list:
+def proteins_from_rf(aa_seq: str) -> List[str]:
     """
-    given a string of amino-acids, return a list of the proteins
+    Given a string of amino-acids, return a list of the proteins
     :param aa_seq: a string of aminoacids
     :return: a list of all possible proteins
     """
@@ -74,13 +75,13 @@ def proteins_from_rf(aa_seq: str) -> list:
     return proteins
 
 
-def all_proteins_from_orfs (seq: str, start=0,end=0,ordered = False)->list:
+def all_proteins_from_orfs(seq: str, start=0, end=0, ordered=False) -> List[str]:
     """
-    use functions to process the dna sequence given, and return a list of proteins
+    Use functions to process the dna sequence given, and return a list of proteins
     :param: a string representing the DNA sequence
     :return: list of all possible proteins
     """
-    if end>start:
+    if end > start:
         rfs = gen_reading_frames(seq[start:end])
     else:
         rfs = gen_reading_frames(seq)
@@ -90,5 +91,5 @@ def all_proteins_from_orfs (seq: str, start=0,end=0,ordered = False)->list:
         for p in prots:
             res.append(p)
     if ordered:
-        return sorted(res,key=len,reverse=True)
+        return sorted(res, key=len, reverse=True)
     return res
