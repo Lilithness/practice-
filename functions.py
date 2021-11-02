@@ -19,7 +19,7 @@ def reverse_compliment(seq: str) -> str:
     :param seq: a DNA sequence in the IUPAC nucleotide code representation
     :return: reverse-complementary DNA sequence
     """
-    return ''.join([dna_reverse_compliment[nuc] for nuc in seq])
+    return ''.join([info.dna_reverse_compliment[nuc] for nuc in seq])
     
 
 def translate(seq: str, init_pos=0) -> List[str]:
@@ -30,7 +30,7 @@ def translate(seq: str, init_pos=0) -> List[str]:
     :return: a string representing the amino-acid sequence
     """
     return [
-        table[seq[pos:pos+3]] for pos in range(init_pos, len(seq)-2, 3)
+        info.table[seq[pos:pos+3]] for pos in range(init_pos, len(seq)-2, 3)
     ]
 
 

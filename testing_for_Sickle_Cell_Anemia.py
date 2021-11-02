@@ -9,45 +9,40 @@ def main(args:list) -> none:
     """
     filename = args[0]
 
-with open ("filename", "r") as file:
-    """
-    open the file that has the DNA sequence and process it
-    """
-    contents = file.read()
-    contents = contents.strip()
-    dna = ''.join(contents)
-    dna = dna.upper()
-    dna = dna.replace("\n", "")
-    dna = dna.replace("\r", "")
-    dna = dna.replace(" ", "")
+    print(f"Working with input file: '{filename}'")
+
+    try:
+        with open(filename, "r") as file:
+            # open the file that has the DNA sequence and process it
+            # contents = [line for line in file]
+            dna = file.read().strip()
+            # dna = ''.join(contents)
+            
+            # Look up replacing multiple characters
+            dna = dna.upper().replace("\n", "").replace("\r", "").replace(" ", "")        
+    except FileNotFoundError:
+        print(f"Sorry, file not found: '{filename}'")
     
-try:
-    """
-    try to open the file, send an error massage if it wasn't found
-    """
-    filename = open(dna, "r")
-except FileNotFoundError:
-    print("sorry, file not found")
+    all_proteins_expected = []
 
-all_protiens_expected = []
-"""
-make a list of protein sequences
-"""
-for prot in all_proteins_from_orfs(dna:str, 0, 0, True) -> list[list[str]]:
-    all_protiens_expected.append(prot)
+    # Make a list of protein sequences
+    for prot in functions.all_proteins_from_orfs(dna, 0, 0, True):
+        all_proteins_expected.append(prot)
 
-for i in all_protiens_expected:
-    """
-    check if this string given, is in the list
-    """
-    if i == "MVHLTPEEKSAVTALWGKVNVDEVGGEALGRLVSRLQDRFKETNRNWACGDREDSWVSDRH":
-        print("the biological protein's index in the list is number ", all_protiens_expected.index(i),
-                "\nno sickle cell anemia")
+    print(f"Protein sequences: {all_proteins_expected}")
 
+    for i in all_proteins_expected:
+        # Check if the given string is in the list
 
-    if i == "MVHLTPVEKSAVTALWGKVNVDEVGGEALGRLVSRLQDRFKETNRNWACGDREDSWVSDRH":
-        print(all_protiens_expected.index(i))
-        print("sickle cell anemia positive")
+        if i == "MVHLTPEEKSAVTALWGKVNVDEVGGEALGRLVSRLQDRFKETNRNWACGDREDSWVSDRH":
+            print("the biological protein's index in the list is number ", all_proteins_expected.index(i),
+                    "\nno sickle cell anemia")
+    
+    
+        if i == "MVHLTPVEKSAVTALWGKVNVDEVGGEALGRLVSRLQDRFKETNRNWACGDREDSWVSDRH":
+            print(all_proteins_expected.index(i))
+            print("sickle cell anemia positive")
+
 
 if __name__ == "__main__":
     main(sys.argv[1:])
