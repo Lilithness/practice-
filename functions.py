@@ -1,6 +1,6 @@
 from typing import List
 
-from info import *
+import info
 
 
 def transcription(seq: str) -> str:
@@ -54,9 +54,7 @@ def gen_reading_frames(seq: str) -> List[List[str]]:
 
 def proteins_from_rf(aa_seq: str) -> list:
     """
-    it examins every aminoacid sequence given, starts collecting the amino acid sequences in a list called current protein when it encounters an M which represent a start codon.
-    this list might contain many aminoacids sequences that the function is still adding to until it encounters a stop codon,
-    then every sequence in this lists moves to a list called proteins which will contain all the possible proteins from all the possible DNA reading frames.
+    given a string of amino-acids, return a list of the proteins
     :param aa_seq: a string of aminoacids
     :return: a list of all possible proteins
     """
@@ -68,7 +66,7 @@ def proteins_from_rf(aa_seq: str) -> list:
                 for p in current_protein:
                     proteins.append(p)
                 current_protein = []
-        elif aa == "M":  # start codon
+        elif aa == "M":  # indicates a start codon
             current_protein.append("")
             for i in range(len(current_protein)):
                 current_protein[i] += aa
@@ -78,10 +76,9 @@ def proteins_from_rf(aa_seq: str) -> list:
 
 def all_proteins_from_orfs (seq: str, start=0,end=0,ordered = False)->list:
     """
-    it uses the gen_reading_frames function (so we get aminoacid sequences) on the given sequence and then the proteins_from_rf function to get all proteins,
-    adding them to the res list then sorting them -if needed- depending on their length in ascending order.
-    :param seq: a string of letters representing the DNA nucleotides
-    :return: a list with all proteins
+    use functions to process the dna sequence given, and return a list of proteins
+    :param: a string representing the DNA sequence
+    :return: list of all possible proteins
     """
     if end>start:
         rfs = gen_reading_frames(seq[start:end])
