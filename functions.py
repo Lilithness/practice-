@@ -1,5 +1,4 @@
 from typing import List
-
 import info
 
 
@@ -34,7 +33,6 @@ def translate(seq: str, init_pos=0) -> List[str]:
         info.table[seq[pos:pos+3]] for pos in range(init_pos, len(seq)-2, 3)
     ]
 
-
 def gen_reading_frames(seq: str) -> List[List[str]]:
     """
     Given a nucleotide sequence, return a list of protein candidates,
@@ -52,32 +50,31 @@ def gen_reading_frames(seq: str) -> List[List[str]]:
         translate(reverse_compliment(seq), 2)
     ]
 
-
-def proteins_from_rf(aa_seq: str) -> List[str]:
+def proteins_from_rf(aa_seq):
     """
-    Given a string of amino-acids, return a list of the proteins
+    Compute all possible proteins in an aminoacid seq and return a list of possible proteins
     :param aa_seq: a string of aminoacids
     :return: a list of all possible proteins
     """
     current_protein = []
     proteins = []
     for aa in aa_seq:
-        if aa == "_":  # indicates a stop codon
-            if current_protein:
-                for p in current_protein:
-                    proteins.append(p)
-                current_protein = []
-        elif aa == "M":  # indicates a start codon
-            current_protein.append("")
-            for i in range(len(current_protein)):
-                current_protein[i] += aa
-
+        for a in aa:
+            if a == "_": #indicates stop codon
+                if current_protein:
+                    for p in current_protein:
+                        proteins.append(p)
+                    current_protein = []
+            else:
+                if a =="M": #indicates start codon
+                    current_protein.append("")
+                for i in range(len(current_protein)):
+                    current_protein[i] += a
     return proteins
-
 
 def all_proteins_from_orfs(seq: str, start=0, end=0, ordered=False) -> List[str]:
     """
-    Use functions to process the dna sequence given, and return a list of proteins
+    Compute all possible proteins for all open reading frames
     :param: a string representing the DNA sequence
     :return: list of all possible proteins
     """
