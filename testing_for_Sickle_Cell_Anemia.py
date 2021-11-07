@@ -38,5 +38,6 @@ def main(args: List[str]) -> None:
             print(all_proteins_expected.index(i))
             print("sickle cell anemia positive")
 
-    if __name__ == "__main__":
-        main(sys.argv[1:])
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
