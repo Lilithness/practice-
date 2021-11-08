@@ -44,7 +44,7 @@ def gen_reading_frames(seq: str) -> List[List[str]]:
     return [
         translate(seq, 0),
         translate(seq, 1),
-        translate(seq, 3),
+        translate(seq, 2),
         translate(reverse_compliment(seq), 0),
         translate(reverse_compliment(seq), 1),
         translate(reverse_compliment(seq), 2)
