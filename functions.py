@@ -11,7 +11,7 @@ def transcription(seq: str) -> str:
     return seq.replace("T", "U")
 
 
-def complementart_DNA(seq: str) -> str:
+def complementary_DNA(seq: str) -> str:
     """
     Make a reverse complement of the given nucleotide sequence.
     :param seq: a DNA sequence in the IUPAC nucleotide code representation
@@ -44,9 +44,9 @@ def gen_reading_frames(seq: str) -> List[List[str]]:
         translate(seq, 0),
         translate(seq, 1),
         translate(seq, 2),
-        translate(complementart_DNA(seq), 0),
-        translate(complementart_DNA(seq), 1),
-        translate(complementart_DNA(seq), 2)
+        translate(complementary_DNA(seq), 0),
+        translate(complementary_DNA(seq), 1),
+        translate(complementary_DNA(seq), 2)
     ]
 
 def proteins_from_rf(aa_seq:List[List[str]]) -> List[str]:
