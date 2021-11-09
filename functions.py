@@ -11,14 +11,13 @@ def transcription(seq: str) -> str:
     return seq.replace("T", "U")
 
 
-def reverse_compliment(seq: str) -> str:
+def complementart_DNA(seq: str) -> str:
     """
     Make a reverse complement of the given nucleotide sequence.
-
     :param seq: a DNA sequence in the IUPAC nucleotide code representation
     :return: reverse-complementary DNA sequence
     """
-    return ''.join([info.dna_reverse_compliment[nuc] for nuc in seq])
+    return ''.join([info.dna_compliment_strand[nuc] for nuc in seq])
     
 
 def translate(seq: str, init_pos=0) -> List[str]:
@@ -45,12 +44,12 @@ def gen_reading_frames(seq: str) -> List[List[str]]:
         translate(seq, 0),
         translate(seq, 1),
         translate(seq, 2),
-        translate(reverse_compliment(seq), 0),
-        translate(reverse_compliment(seq), 1),
-        translate(reverse_compliment(seq), 2)
+        translate(complementart_DNA(seq), 0),
+        translate(complementart_DNA(seq), 1),
+        translate(complementart_DNA(seq), 2)
     ]
 
-def proteins_from_rf(aa_seq):
+def proteins_from_rf(aa_seq:List[List[str]]) -> List[str]:
     """
     Compute all possible proteins in an aminoacid seq and return a list of possible proteins
     :param aa_seq: a string of aminoacids
