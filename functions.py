@@ -17,7 +17,7 @@ def complementary_DNA(seq: str) -> str:
     :param seq: a DNA sequence in the IUPAC nucleotide code representation
     :return: reverse-complementary DNA sequence
     """
-    return ''.join([info.dna_compliment_strand[nuc] for nuc in seq])
+    return ''.join([info.dna_complement_strand[nuc] for nuc in seq])
     
 
 def translate(seq: str, init_pos=0) -> List[str]:
