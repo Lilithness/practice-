@@ -1,4 +1,4 @@
-dna_compliment_strand = {"A": "T", "T": "A", "G": "C", "C": "G"}
+dna_complement_strand = {"A": "T", "T": "A", "G": "C", "C": "G"}
 
 table = {
         'ATA': 'I', 'ATC': 'I', 'ATT': 'I', 'ATG': 'M',
