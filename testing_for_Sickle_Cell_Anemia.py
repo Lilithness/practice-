@@ -4,7 +4,7 @@ from typing import List
 
 def main(args: List[str]) -> None:
     """
-    Check if a DNA sequence is Anemic
+    Check if a DNA sequence has a mutation in the hemoglobin-Beta gene
     :param args: list that contains the name of the file
     :return: None
     """
