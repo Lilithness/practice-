@@ -75,4 +75,4 @@ except Exception as err:
     print(f'Other error occurred: {err}')
 else:
     decoded = r.json()
-    print(f'region: {decoded["seq_region_name"]}, start: {decoded["start"]}, end {decoded["end"]} ')
+    print(f'interval: {decoded["seq_region_name"]}: {decoded["start"]}-{decoded["end"]}')
