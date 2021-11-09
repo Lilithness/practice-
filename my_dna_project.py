@@ -2,6 +2,9 @@
 # -*- encoding: utf-8 -*-
 
 from functions import *
+import requests
+from pprint import pprint
+from requests.exceptions import HTTPError
 
 sequence = input("add the file name of the sequence") + ".txt"
 sequence = sequence.strip()
@@ -62,3 +65,14 @@ while (type!=0):
     type = 0
 
 pass
+url = "https://rest.ensembl.org/lookup/symbol/homo_sapiens/HBB"
+try:
+    r = requests.get(url, headers={"Content-Type": "application/json"})
+    r.raise_for_status()
+except HTTPError as http_err:
+    print(f'HTTP error occurred: {http_err}')
+except Exception as err:
+    print(f'Other error occurred: {err}')
+else:
+    decoded = r.json()
+    pprint(repr(decoded))
