@@ -1,10 +1,10 @@
 import sys
 from functions import *
-
 from typing import List
+
 def main(args: List[str]) -> None:
     """
-   ---
+    Check if a DNA sequence is Anemic
     :param args: list that contains the name of the file
     :return: None
     """
@@ -16,7 +16,7 @@ def main(args: List[str]) -> None:
         with open(filename, "r") as file:
             dna = file.read().strip()
             # Look up replacing multiple characters
-            dna = dna.upper().replace("\n", "").replace("\r", "").replace(" ", "")
+            re.sub(r"[\n \r]", "", dna)
     except FileNotFoundError:
         print(f"Sorry, file not found: '{filename}'")
     
