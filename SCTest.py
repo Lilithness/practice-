@@ -1,6 +1,8 @@
 import sys
 from functions import *
 from typing import List
+import re
+
 
 def main(args: List[str]) -> None:
     """
@@ -14,28 +16,27 @@ def main(args: List[str]) -> None:
 
     try:
         with open(filename, "r") as file:
-            dna = file.read().strip()
+            dna = file.read().strip().upper()
             # Look up replacing multiple characters
             re.sub(r"[\n \r]", "", dna)
+            dna = dna.replace(" ", "")
     except FileNotFoundError:
         print(f"Sorry, file not found: '{filename}'")
-    
+
     all_proteins_expected = []
     # Make a list of protein sequences
-    for prot in all_proteins_from_orfs(dna, 0, 0, True):
+    for prot in all_proteins(dna, 0, 0, True):
         all_proteins_expected.append(prot)
 
-    print(all_proteins_expected)
     for i in all_proteins_expected:
         # Check if the given string is in the list
 
         if i == "MVHLTPEEKSAVTALWGKVNVDEVGGEALGRLVSRLQDRFKETNRNWACGDREDSWVSDRH":
-            print("the biological protein's index in the list is number ", all_proteins_expected.index(i),
-                    "\nno sickle cell anemia")
-    
-    
+            print("the protein's index in the list is number ", all_proteins_expected.index(i))
+            print("no sickle cell anemia")
+
         if i == "MVHLTPVEKSAVTALWGKVNVDEVGGEALGRLVSRLQDRFKETNRNWACGDREDSWVSDRH":
-            print(all_proteins_expected.index(i))
+            print("the protein's index in the list is number ", all_proteins_expected.index(i))
             print("sickle cell anemia positive")
 
 
