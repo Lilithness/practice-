@@ -1,5 +1,14 @@
 from info import *
 
+
+def fetch_seq():
+    url = "https://rest.ensembl.org/sequence/region/human/11: 5,225,464-5,229,395:-1"
+    r =requests.get(url, headers={ "Content-Type" : "text/plain"})
+    r.raise_for_status()
+    f= open("sequence.txt", "w+")
+    f.write(r.text)
+    f.close()
+
 def transcription(seq: str) -> str:
     """
     Replace all "T" characters with a single "U".
