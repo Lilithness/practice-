@@ -4,6 +4,7 @@ import info
 
 def transcription(seq: str) -> str:
     """
+
     Replace all "T" characters with a single "U".
     :param seq: a string of letters representing DNA nucleotides
     :return: a string with all "T"s replaced by single "U"
@@ -18,11 +19,11 @@ def complementary_DNA(seq: str) -> str:
     :return: reverse-complementary DNA sequence
     """
     return ''.join([info.dna_complement_strand[nuc] for nuc in seq])
-    
+
 
 def translate(seq: str, init_pos=0) -> List[str]:
     """
-    Map nucleotide triplets (codons) to amino-acids, using IUPAC single-character representations.
+    Map codons to amino-acids, using IUPAC representations.
 
     :param seq: a string of letters representing DNA nucleotides
     :param init_pos: ---
@@ -30,7 +31,8 @@ def translate(seq: str, init_pos=0) -> List[str]:
     """
     return [
         info.table[seq[pos:pos+3]] for pos in range(init_pos, len(seq)-2, 3)
-    ]
+            ]
+
 
 def gen_reading_frames(seq: str) -> List[List[str]]:
     """
@@ -49,31 +51,33 @@ def gen_reading_frames(seq: str) -> List[List[str]]:
         translate(complementary_DNA(seq), 2)
     ]
 
-def proteins_from_rf(aa_seq:List[List[str]]) -> List[str]:
+
+def proteins_from_rf(aa_seq) -> List[str]:
     """
-    Compute all possible proteins in an aminoacid seq and return a list of possible proteins
+    Compute all possible proteins. return a list of possible proteins
     :param aa_seq: a string of aminoacids
     :return: a list of all possible proteins
     """
-    current_protein = []
-    proteins = []
+    current_protein: List[str] = []
+    proteins: List[str] = []
     for aa in aa_seq:
         for a in aa:
-            if a == "_": #indicates stop codon
+            if a == "_":  # indicates stop codon
                 if current_protein:
                     for p in current_protein:
                         proteins.append(p)
                     current_protein = []
             else:
-                if a =="M": #indicates start codon
+                if a == "M":  # indicates start codon
                     current_protein.append("")
                 for i in range(len(current_protein)):
                     current_protein[i] += a
     return proteins
 
-def all_proteins_from_orfs(seq: str, start=0, end=0, ordered=False) -> List[str]:
+
+def all_proteins(seq: str, start=0, end=0, ordered=False) -> List[str]:
     """
-    Compute all possible proteins for all open reading frames
+    Compute possible proteins for 3 open reading frames
     :param: a string representing the DNA sequence
     :return: list of all possible proteins
     """
