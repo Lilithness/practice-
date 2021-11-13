@@ -1,16 +1,13 @@
 #!/usr/bin/env python3
 # -*- encoding: utf-8 -*-
-
 from functions import *
 import requests
 from pprint import pprint
 from requests.exceptions import HTTPError
 
-sequence = input("add the file name of the sequence") + ".txt"
-sequence = sequence.strip()
-
+fetch_Seq()
 try:
-    f = open(sequence, "r")
+    f = open("sequence.txt", "r")
 except FileNotFoundError:
     print("sorry, file not found")
     quit()
