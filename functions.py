@@ -26,7 +26,7 @@ def translate(seq: str, init_pos=0) -> List[str]:
     Map codons to amino-acids, using IUPAC representations.
 
     :param seq: a string of letters representing DNA nucleotides
-    :param init_pos: ---
+    :param init_pos: index of starting nucleotide
     :return: a string representing the amino-acid sequence
     """
     return [
