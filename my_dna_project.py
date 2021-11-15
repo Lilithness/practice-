@@ -68,3 +68,4 @@ except Exception as err:
 else:
     decoded = r.json()
     print(f'interval: {decoded["seq_region_name"]}: {decoded["start"]}-{decoded["end"]}')
+    print(f'type:{decoded["biotype"]} {decoded["object_type"]},Name of the gene:{decoded["display_name"]}')
