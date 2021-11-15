@@ -10,12 +10,9 @@ def fetch_Seq(None):->str
     r = requests.get(url, headers={"Content-Type": "text/x-fasta"})
     r.raise_for_status()
     with open("SickleCell.txt", "w+") as file:
-        sequence = r.text
-        file.write(sequence)
+        file.write(r.text)
     with open("SickleCell.txt", "r") as file:
-        temp = []
-        for i in file:
-            temp.append(i)
+        temp = [i for i in file]
     dna = ''.join(temp[1:])
     return dna
     
