@@ -31,7 +31,7 @@ def reverse_compliment(seq: str)-> str:
     :param seq: a string of letters representing DNA nucleotides
     :return: a string representing the complimentary DNA
     """
-    return ''.join([dna_reverse_compliment[nuc] for nuc in seq])
+    return ''.join([[dna_complement_strand[nuc] for nuc in seq])
     
 
 def translate(seq: str, init_pos=0)-> str:
