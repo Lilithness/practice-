@@ -1,7 +1,7 @@
 from info import *
 import requests
 
-def fetch_Seq(None):->str
+def fetch_Seq()->str:
      """
     Fetch a DNA sequence from Ensembl
     :return: a string that represents the DNA 
