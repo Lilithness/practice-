@@ -5,13 +5,8 @@ import requests
 from pprint import pprint
 from requests.exceptions import HTTPError
 
-fetch_Seq()
-try:
-    f = open("sequence.txt", "r")
-except FileNotFoundError:
-    print("sorry, file not found")
-    quit()
-dna = f.read()
+
+dna = fetch_Seq()
 dna = dna.upper()
 dna = dna.replace("\n", "")
 dna = dna.replace("\r", "")
