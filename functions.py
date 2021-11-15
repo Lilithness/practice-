@@ -4,7 +4,7 @@ import requests
 def fetch_Seq(None):->str
      """
     Fetch a DNA sequence from Ensembl
-    :return: a string that represents the DNA
+    :return: a string that represents the DNA 
     """
     url = "https://rest.ensembl.org/sequence/region/human/11: 5,225,464-5,229,395:-1"
     r = requests.get(url, headers={"Content-Type": "text/x-fasta"})
@@ -12,8 +12,7 @@ def fetch_Seq(None):->str
     with open("SickleCell.txt", "w+") as file:
         file.write(r.text)
     with open("SickleCell.txt", "r") as file:
-        temp = [i for i in file]
-    dna = ''.join(temp[1:])
+        dna = ''.join([i for i in file][1:]) # starting from index 1 to skip the file's header
     return dna
     
     
