@@ -4,14 +4,7 @@ from functions import *
 import requests
 from requests.exceptions import HTTPError
 import sys
-import re
 from typing import List
-
-dna = fetch_Seq()
-dna = dna.upper()
-dna = dna.replace("\n", "")
-dna = dna.replace("\r", "")
-dna = dna.replace(" ", "")
 
 url = "https://rest.ensembl.org/lookup/symbol/homo_sapiens/HBB"
 try:
@@ -26,22 +19,23 @@ else:
     print(f'interval: {decoded["seq_region_name"]}: {decoded["start"]}-{decoded["end"]}')
     print(f'type:{decoded["biotype"]} {decoded["object_type"]},Name of the gene:{decoded["display_name"]}')
 
+
 def main(args: List[str]) -> None:
     """
     Check if a DNA sequence has a mutation in the hemoglobin-Beta gene
     :param args: list that contains the name of the file
     :return: None
     """
+    dna = fetch_Seq()
     filename = args[0]
 
     print(f"Working with input file: '{filename}'")
 
     try:
-        with open(filename, "r") as file:
-            dna = file.read().strip().upper()
-            # Look up replacing multiple characters
-            re.sub(r"[\n \r]", "", dna)
-            dna = dna.replace(" ", "")
+        dna = dna.upper()
+        dna = dna.replace("\n", "")
+        dna = dna.replace("\r", "")
+        dna = dna.replace(" ", "")
     except FileNotFoundError:
         print(f"Sorry, file not found: '{filename}'")
 
@@ -49,7 +43,7 @@ def main(args: List[str]) -> None:
     # Make a list of protein sequences
     for prot in all_proteins(dna, 0, 0, True):
         all_proteins_expected.append(prot)
-
+    print(all_proteins_expected)
     for i in all_proteins_expected:
         # Check if the given string is in the list
 
@@ -64,4 +58,3 @@ def main(args: List[str]) -> None:
 
 if __name__ == "__main__":
     main(sys.argv[1:])
-    
