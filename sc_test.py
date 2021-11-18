@@ -1,8 +1,30 @@
-import sys
+#!/usr/bin/env python3
+# -*- encoding: utf-8 -*-
 from functions import *
-from typing import List
+import requests
+from requests.exceptions import HTTPError
+import sys
 import re
+from typing import List
 
+dna = fetch_Seq()
+dna = dna.upper()
+dna = dna.replace("\n", "")
+dna = dna.replace("\r", "")
+dna = dna.replace(" ", "")
+
+url = "https://rest.ensembl.org/lookup/symbol/homo_sapiens/HBB"
+try:
+    r = requests.get(url, headers={"Content-Type": "application/json"})
+    r.raise_for_status()
+except HTTPError as http_err:
+    print(f'HTTP error occurred: {http_err}')
+except Exception as err:
+    print(f'Other error occurred: {err}')
+else:
+    decoded = r.json()
+    print(f'interval: {decoded["seq_region_name"]}: {decoded["start"]}-{decoded["end"]}')
+    print(f'type:{decoded["biotype"]} {decoded["object_type"]},Name of the gene:{decoded["display_name"]}')
 
 def main(args: List[str]) -> None:
     """
@@ -42,3 +64,4 @@ def main(args: List[str]) -> None:
 
 if __name__ == "__main__":
     main(sys.argv[1:])
+    
