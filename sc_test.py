@@ -5,6 +5,8 @@ import requests
 from requests.exceptions import HTTPError
 import sys
 from typing import List
+import re
+import os.path
 
 url = "https://rest.ensembl.org/lookup/symbol/homo_sapiens/HBB"
 try:
@@ -26,24 +28,26 @@ def main(args: List[str]) -> None:
     :param args: list that contains the name of the file
     :return: None
     """
-    dna = fetch_Seq()
+
     filename = args[0]
+    if os.path.exists(filename):
+        try:
+            with open(filename, "r") as file:
+                dna = file.read().strip().upper()
+                re.sub(r"[\n \r]", "", dna)
+                dna = dna.replace(" ", "")
+        except FileNotFoundError:
+            print(f"Sorry, file not found: '{filename}'")
+    else:
+        dna = fetch_Seq()
+        dna = dna.replace("\n", "")
 
     print(f"Working with input file: '{filename}'")
-
-    try:
-        dna = dna.upper()
-        dna = dna.replace("\n", "")
-        dna = dna.replace("\r", "")
-        dna = dna.replace(" ", "")
-    except FileNotFoundError:
-        print(f"Sorry, file not found: '{filename}'")
 
     all_proteins_expected = []
     # Make a list of protein sequences
     for prot in all_proteins(dna, 0, 0, True):
         all_proteins_expected.append(prot)
-    print(all_proteins_expected)
     for i in all_proteins_expected:
         # Check if the given string is in the list
 
