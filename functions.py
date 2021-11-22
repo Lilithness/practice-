@@ -2,21 +2,18 @@ from typing import List
 import info
 import requests
 
-def fetch_Seq()->str:
-     """
-    Fetch a DNA sequence from Ensembl
-    :return: a string that represents the DNA 
-    """
+
+def fetch_seq() -> str:
     url = "https://rest.ensembl.org/sequence/region/human/11: 5,225,464-5,229,395:-1"
     r = requests.get(url, headers={"Content-Type": "text/x-fasta"})
     r.raise_for_status()
     with open("SickleCell.txt", "w+") as file:
         file.write(r.text)
     with open("SickleCell.txt", "r") as file:
-        dna = ''.join([i for i in file][1:]) # starting from index 1 to skip the file's header
+        dna = ''.join([i for i in file][1:])  # starting from index 1 to skip the file's header
     return dna
-    
-    
+
+
 def transcription(seq: str) -> str:
     """
     Replace all "T" characters with a single "U".
@@ -33,6 +30,7 @@ def complementary_DNA(seq: str) -> str:
     :return: reverse-complementary DNA sequence
     """
     return ''.join([info.dna_complement_strand[nuc] for nuc in seq])
+
 
 def translate(seq: str, init_pos=0) -> List[str]:
     """
