@@ -4,6 +4,10 @@ import requests
 
 
 def fetch_seq() -> str:
+    """
+    Gets the DNA sequence of interest form ensembl
+    :return: A DNA sequence
+    """
     url = "https://rest.ensembl.org/sequence/region/human/11: 5,225,464-5,229,395:-1"
     r = requests.get(url, headers={"Content-Type": "text/x-fasta"})
     r.raise_for_status()
