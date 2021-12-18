@@ -13,6 +13,10 @@ import os.path
 get_cmd_output("bio align /home/lilith/input/sample.fsa /home/lilith/input/query.fsa --vcf | column >alignment_result.vcf")
 #Run a shell command via subprocess and return exit code and stdout/stderr.
 
+pd.set_option('display.max_columns', 60)
+pd.set_option('display.max_rows',None)
+#Set pandas options
+
 url = "https://rest.ensembl.org/lookup/symbol/homo_sapiens/HBB"
 try:
     r = requests.get(url, headers={"Content-Type": "application/json"})
