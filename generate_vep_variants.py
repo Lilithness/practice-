@@ -34,7 +34,7 @@ def fetch_seq():
     with open("SickleCell.txt", "w+") as file:
         file.write(r.text)
 
-def main(args: List[str]) -> None:
+def main(args) -> None:
     """
     Check if a DNA sequence has a mutation in the hemoglobin-Beta gene
     :param args: list that contains the name of the file
@@ -45,7 +45,7 @@ def main(args: List[str]) -> None:
     if os.path.exists(query):
         try:
           sample_path = "/home/lilith/input/sample.fsa"
-          get_cmd_output(f"bio align {query} {sample_path2} --vcf | column >alignment_result.vcf")
+          get_cmd_output(f"bio align {query} {sample_path} --vcf | column >alignment_result.vcf")
 
         except FileNotFoundError:
             print(f"Sorry, file not found: '{query}'")
