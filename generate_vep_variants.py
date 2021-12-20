@@ -58,4 +58,14 @@ def main(args: List[str]) -> None:
     pd.set_option('display.max_rows',None)
     vcf_df = read_vcf("alignment_result.vcf")
     vcf_df["POS"] = vcf_df["POS"] +5225464
-    
+    variants = []
+    for row in vcf_df.itertuples():
+        region = row.CHROM
+        chrom = region.split(":")[2]
+        strand = region.split(":")[-1]
+        ref = row.REF
+        pos = row.POS
+        end_pos= pos + len(ref)-1
+        alt = row.ALT
+        line = f"{chrom} {pos} {end_pos} {ref}/{alt} {strand}"
+        variants.append(line)
