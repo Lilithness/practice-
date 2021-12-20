@@ -44,7 +44,7 @@ def main(args: List[str]) -> None:
     query = args[0]
     if os.path.exists(query):
         try:
-          sample_path = /home/lilith/input/sample.fsa
+          sample_path = "/home/lilith/input/sample.fsa"
           get_cmd_output(f"bio align {query} {sample_path2} --vcf | column >alignment_result.vcf")
 
         except FileNotFoundError:
