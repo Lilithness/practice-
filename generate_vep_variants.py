@@ -86,3 +86,5 @@ def main(args: List[str]) -> None:
             for i in decoded:
                 pretty_print_json = pprint.pformat(i)
                 print(pretty_print_json)
+if __name__ == "__main__":
+    main(sys.argv[1:])
