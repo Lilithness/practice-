@@ -22,3 +22,14 @@ def read_vcf(path):
                'QUAL': str, 'FILTER': str, 'INFO': str},
         sep='\t'
     ).rename(columns={'#CHROM': 'CHROM'})
+  
+def fetch_seq():
+    """
+    Gets the DNA sequence of interest form ensembl
+    :return: A fasta file
+    """
+    url = "https://rest.ensembl.org/sequence/region/human/11: 5,225,464-5,229,395:-1"
+    r = requests.get(url, headers={"Content-Type": "text/x-fasta"})
+    r.raise_for_status()
+    with open("SickleCell.txt", "w+") as file:
+        file.write(r.text)
