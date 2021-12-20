@@ -69,3 +69,6 @@ def main(args: List[str]) -> None:
         alt = row.ALT
         line = f"{chrom} {pos} {end_pos} {ref}/{alt} {strand}"
         variants.append(line)
+        data = json.dumps({
+        "variants": variants
+        })
