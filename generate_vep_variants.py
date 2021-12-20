@@ -72,3 +72,17 @@ def main(args: List[str]) -> None:
         data = json.dumps({
         "variants": variants
         })
+        server = "https://rest.ensembl.org"
+        ext = "/vep/homo_sapiens/region"
+        headers={ "Content-Type" : "application/json", "Accept" : "application/json"}
+        if data == '{"variants": []}':
+            print("The sequences match")
+        else:
+            r = requests.post(server+ext, headers=headers, data= data)
+            if not r.ok:
+                r.raise_for_status()
+                sys.exit()
+            decoded = r.json()
+            for i in decoded:
+                pretty_print_json = pprint.pformat(i)
+                print(pretty_print_json)
