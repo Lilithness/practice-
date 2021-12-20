@@ -22,7 +22,7 @@ def read_vcf(path):
                'QUAL': str, 'FILTER': str, 'INFO': str},
         sep='\t'
     ).rename(columns={'#CHROM': 'CHROM'})
-  
+
 def fetch_seq():
     """
     Gets the DNA sequence of interest form ensembl
@@ -33,3 +33,25 @@ def fetch_seq():
     r.raise_for_status()
     with open("SickleCell.txt", "w+") as file:
         file.write(r.text)
+
+def main(args: List[str]) -> None:
+    """
+    Check if a DNA sequence has a mutation in the hemoglobin-Beta gene
+    :param args: list that contains the name of the file
+    :return: None
+    """
+
+    query = args[0]
+    if os.path.exists(query):
+        try:
+          sample_path = /home/lilith/input/sample.fsa
+          get_cmd_output(f"bio align {query} {sample_path2} --vcf | column >alignment_result.vcf")
+
+        except FileNotFoundError:
+            print(f"Sorry, file not found: '{query}'")
+    else:
+        dna = fetch_seq()
+
+    print(f"Working with input file: '{query}'")
+
+
