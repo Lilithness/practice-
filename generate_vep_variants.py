@@ -53,5 +53,8 @@ def main(args: List[str]) -> None:
         dna = fetch_seq()
 
     print(f"Working with input file: '{query}'")
-
-
+    
+    pd.set_option('display.max_columns', 60)
+    pd.set_option('display.max_rows',None)
+    
+    vcf_df = read_vcf("alignment_result.vcf")
