@@ -1,11 +1,15 @@
-import pandas as pd
-from corvus.cmd import get_cmd_output
+"""
+Get descriptions about the variants found between two DNA sequences
+"""
+
 import io
 import os
-import requests
 import sys
 import json
 import pprint
+import requests
+import pandas as pd
+from corvus.cmd import get_cmd_output # type: ignore
 
 
 def read_vcf(path):
@@ -14,8 +18,8 @@ def read_vcf(path):
     :param path: VCF file path
     :return: Data frame of all data
     """
-    with open(path, 'r') as f:
-        lines = [l for l in f if not l.startswith('##')]
+    with open(path, 'r',encoding='ascii') as file:
+        lines = [word for word in file if not word.startswith('##')]
     return pd.read_csv(
         io.StringIO(''.join(lines)),
         dtype={'#CHROM': str, 'POS': int, 'ID': str, 'REF': str, 'ALT': str,
@@ -30,10 +34,10 @@ def fetch_seq():
     :return: A fasta file
     """
     url = "https://rest.ensembl.org/sequence/region/human/11: 5,225,464-5,229,395:-1"
-    r = requests.get(url, headers={"Content-Type": "text/x-fasta"})
-    r.raise_for_status()
-    with open("SickleCell.txt", "w+") as file:
-        file.write(r.text)
+    req = requests.get(url, headers={"Content-Type": "text/x-fasta"})
+    req.raise_for_status()
+    with open("SickleCell.txt", "w+", encoding='ascii') as file:
+        file.write(req.text)
 
 
 def main(args) -> None:
@@ -74,22 +78,22 @@ def main(args) -> None:
         alt = row.ALT
         line = f"{chrom} {pos} {end_pos} {ref}/{alt} {strand}"
         variants.append(line)
-        data = json.dumps({
-            "variants": variants
-        })
-        url = "https://rest.ensembl.org/vep/homo_sapiens/region"
-        headers = {"Content-Type": "application/json", "Accept": "application/json"}
-        if data == '{"variants": []}':
-            print("The sequences match")
-        else:
-            r = requests.post(url, headers=headers, data=data)
-            if not r.ok:
-                r.raise_for_status()
-                sys.exit()
-            decoded = r.json()
-            for i in decoded:
-                pretty_print_json = pprint.pformat(i)
-                print(pretty_print_json)
+    data = json.dumps({
+        "variants": variants
+    })
+    url = "https://rest.ensembl.org/vep/homo_sapiens/region"
+    headers = {"Content-Type": "application/json", "Accept": "application/json"}
+    if data == '{"variants": []}':
+        print("The sequences match")
+    else:
+        req = requests.post(url, headers=headers, data=data)
+        if not req.ok:
+            req.raise_for_status()
+            sys.exit()
+        decoded = req.json()
+        for i in decoded:
+            pretty_print_json = pprint.pformat(i)
+            print(pretty_print_json)
 
 
 if __name__ == "__main__":
