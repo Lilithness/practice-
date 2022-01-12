@@ -3,8 +3,6 @@ flake8
 mypy
 requests
 types-requests
-requests.exceptions
 git+https://github.com/corvus-sapiens/corvus.git
 pandas
-sys
-pprint
+data-science-types
