@@ -6,10 +6,10 @@ import io
 import os
 import sys
 import json
-import pprint
+from typing import Dict, List, Any, Sequence
 import requests
 import pandas as pd
-from corvus.cmd import get_cmd_output # type: ignore
+from corvus.cmd import get_cmd_output  # type: ignore
 
 
 def read_vcf(path):
@@ -18,7 +18,7 @@ def read_vcf(path):
     :param path: VCF file path
     :return: Data frame of all data
     """
-    with open(path, 'r',encoding='ascii') as file:
+    with open(path, 'r', encoding='ascii') as file:
         lines = [word for word in file if not word.startswith('##')]
     return pd.read_csv(
         io.StringIO(''.join(lines)),
@@ -78,51 +78,55 @@ def main(args) -> None:
         alt = row.ALT
         line = f"{chrom} {pos} {end_pos} {ref}/{alt} {strand}"
         variants.append(line)
-    data = json.dumps({
+    jdata = json.dumps({
         "variants": variants
     })
     url = "https://rest.ensembl.org/vep/homo_sapiens/region"
     headers = {"Content-Type": "application/json", "Accept": "application/json"}
-    if data == '{"variants": []}':
+    if jdata == '{"variants": []}':
         print("The sequences match")
     else:
-        req = requests.post(url, headers=headers, data=data)
+        req = requests.post(url, headers=headers, data=jdata)
         if not req.ok:
             req.raise_for_status()
             sys.exit()
         decoded = req.json()
-        with open("datafile_new1.json", "a") as file:
-            file.write(json.dumps(decoded, ensure_ascii=False, indent=4))
-        with open("datafile_new1.json", 'r') as file:
-            data = json.load(file)
+        if not os.path.exists("datafile.json"):
+            with open("datafile.json", "a", encoding='ascii') as file:
+                file.write(json.dumps(decoded, ensure_ascii=False, indent=4))
+        with open("datafile.json", 'r', encoding='ascii') as file:
+            data: Sequence[dict] = json.load(file)
         consequences_list = []
-        for i in range(len(data)):
-            example = data[i]
-            example['transcript_consequences'] = [item for item in example['transcript_consequences'] if
-                                                  type(item) == dict]
-            example['significant_transcript_consequences'] = \
-            [item for item in example['transcript_consequences'] if item['transcript_id'] == 'ENST00000335295'][0]
+        for i, item in enumerate(data):
+            example: Any = data[i]
+            # example['transcript_consequences']: Union[str, slice] = []
+
+            example["transcript_consequences"] = [
+                item for item in example['transcript_consequences'] if isinstance(item, dict)
+            ]
+
+            example['significant_transcript_consequences'] = [item for item in example['transcript_consequences'] if item['transcript_id'] == 'ENST00000335295'][0]
             consequences_list.append(example['significant_transcript_consequences'])
         pd.set_option('display.max_rows', None)
         pd.set_option('display.max_columns', None)
         pd.set_option('display.width', 1000)
-        reglist = []
+        reglist: List[List[Dict[str, Any]]] = []  # list of lists of one dictionary
         ex_dict_list = []
-        for i in range(len(data)):
+        for i, item in enumerate(data):
             newexample = data[i]
-            newexample['regulatory'] = [item for item in newexample['regulatory_feature_consequences']]
-            reglist.append(newexample['regulatory'])
+            # list(newexample['regulatory_feature_consequences'])
+            reglist.append(newexample['regulatory_feature_consequences'])
             newexample['allele_string'] = [char for char in newexample['allele_string'] if char != '/']
             newexample['Ref'] = [newexample['allele_string'][0]][0]
             assembled_dict = {**newexample, **consequences_list[i], **reglist[i][0]}
             ex_dict_list.append(assembled_dict)
         new = pd.DataFrame(ex_dict_list,
-                           columns=['gene_symbol', 'seq_region_name', 'start', 'end','Ref', 'variant_allele',  'strand',
+                           columns=['gene_symbol', 'seq_region_name', 'start', 'end', 'Ref', 'variant_allele',  'strand',
                                     'biotype', 'impact'])
         new.rename(
             columns={'seq_region_name': 'Chromosome', 'variant_allele': 'Alt', 'gene_symbol': 'Gene', 'start': 'Start',
                      'end': 'End', 'strand': 'Strand', 'biotype': 'Biotype', 'impact': 'Impact'}, inplace=True)
-        new.to_csv('datafile_new.csv', index=False)
+        new.to_csv('datafile11_new.csv', index=False)
         pd.set_option('display.max_columns', 60)
         print(new)
 
