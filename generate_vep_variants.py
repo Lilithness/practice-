@@ -38,14 +38,15 @@ def fetch_seq(symbol: str) -> None:
     :param: Gene symbol
     :return: None
     """
-    ## TODO: Fix the hard-coded values
-    url = "https://rest.ensembl.org/sequence/region/human/11: 5,225,464-5,229,395:-1"
-    req = requests.get(url, headers={"Content-Type": "text/x-fasta"})
+    url = "https://rest.ensembl.org/lookup/symbol/homo_sapiens/"  # to get the needed info about the gene chosen to get a sequence from ensembl
+    req = requests.get(url + symbol, headers={"Content-Type": "application/json"})
     req.raise_for_status()
-    ## TODO: do not hard-code the file name
-    ## TODO: fix the extension
-    ## TODO: w+ ?
-    with open("SickleCell.txt", "w+", encoding='ascii') as file:
+    decoded = req.json()
+    interval = f'{decoded["seq_region_name"]}:{decoded["start"]}-{decoded["end"]}:{decoded["strand"]}'
+    url = "https://rest.ensembl.org/sequence/region/human/"
+    req = requests.get(url + interval, headers={"Content-Type": "text/x-fasta"})
+    req.raise_for_status()
+    with open("generated_query.fsa", "w", encoding='ascii') as file:
         file.write(req.text)
 
 
