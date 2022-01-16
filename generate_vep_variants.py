@@ -58,29 +58,20 @@ def main(args) -> None:
     """
 
     ## TODO: use argparse
-    query = args[0]  ## expected to be the name of a FASTA file
-    try:
-        ## TODO: do not use absolute paths
-        ## TODO: assign this value dynamically (argparse)
-        sample_path = "/home/lilith/input/sample.fsa"
-        ## TODO: do not hard-code the output filename
-        get_cmd_output(f"bio align {query} {sample_path} --vcf | column > alignment_result.vcf")
-
-    except FileNotFoundError:
-        print(f"Sorry, file not found: '{query}'")
-
-        ## TODO: add the gene symbol parameter
-        fetch_seq()
-
-        sample_path = "/home/lilith/input/sample.fsa"
-        query = "SickleCell.txt"
-        get_cmd_output(f"bio align {query} {sample_path} --vcf | column > alignment_result.vcf")
-
+    query = args[0]  # Expected to be the name of a FASTA file
+    if not os.path.exists(query):
+        fetch_seq(args[1])  # Expected to be the gene symbol
+        query = "generated_query.fsa"
+    sample_path = "test/Sample.fsa"  # should i make it an input?
+    alignment_result = f'alignment_result_{args[1]}.vcf'  # the name of the allignment file depending on the gene symbol
+    get_cmd_output(f"bio align {query} {sample_path} --vcf > {alignment_result}")  # check if the colomn option was necessary
 
     print(f"Working with input file: '{query}'")
 
-    pd.set_option('display.max_columns', 60)
+    pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None)
+    pd.set_option('display.width', 1000)
+
 
     ## TODO: Fetch the region and the genomic coordinate offset ("start") from Ensembl
     vcf_df = read_vcf("alignment_result.vcf")
