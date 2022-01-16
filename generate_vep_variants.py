@@ -16,7 +16,7 @@ from corvus.cmd import get_cmd_output  # type: ignore
 def read_vcf(path: str):
     ## TODO: VCF file is certainly not for (aligned) sequences :-)
     """
-    Read a VCF file of aligned sequences
+    Read a VCF file
     :param path: VCF file path
     :return: Data frame of all data
     """
@@ -34,7 +34,9 @@ def read_vcf(path: str):
 ## TODO: pass the gene symbol
 def fetch_seq(symbol: str) -> None:
     """
-    Get the DNA sequence of interest from Ensembl
+    Get the DNA sequence of that symbol from Ensembl in a file formate
+    :param: Gene symbol
+    :return: None
     """
     ## TODO: Fix the hard-coded values
     url = "https://rest.ensembl.org/sequence/region/human/11: 5,225,464-5,229,395:-1"
