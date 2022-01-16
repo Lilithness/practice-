@@ -57,6 +57,10 @@ def main(args) -> None:
     :return: None
     """
 
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.max_rows', None)
+    pd.set_option('display.width', 1000)
+
     ## TODO: use argparse
     query = args[0]  # Expected to be the name of a FASTA file
     if not os.path.exists(query):
@@ -68,16 +72,16 @@ def main(args) -> None:
 
     print(f"Working with input file: '{query}'")
 
-    pd.set_option('display.max_columns', None)
-    pd.set_option('display.max_rows', None)
-    pd.set_option('display.width', 1000)
-
-
     ## TODO: Fetch the region and the genomic coordinate offset ("start") from Ensembl
-    vcf_df = read_vcf("alignment_result.vcf")
-    vcf_df["POS"] = vcf_df["POS"] + 5225464
+    url = "https://rest.ensembl.org/lookup/symbol/homo_sapiens/"  # to get the needed info about the gene chosen to get a sequence from ensembl
+    req = requests.get(url + args[1], headers={"Content-Type": "application/json"})
+    req.raise_for_status()
+    decoded = req.json()
+    strpos = int(decoded["start"])
+    vcf_df = read_vcf(alignment_result)
+    vcf_df["POS"] = vcf_df["POS"] + strpos  # getting the genomic indexing. had to duplicate the same code from fetch seq
 
-    variants = []
+    variants: List = []  # list of all possible variants of the sequences in the specific right format
     for row in vcf_df.itertuples():
         region = row.CHROM
         chrom = region.split(":")[2]
@@ -88,7 +92,7 @@ def main(args) -> None:
 
     jdata = json.dumps({
         "variants": variants
-    })
+    })  # the json format needed for the variants
 
     url = "https://rest.ensembl.org/vep/homo_sapiens/region"
     headers = {"Content-Type": "application/json", "Accept": "application/json"}
