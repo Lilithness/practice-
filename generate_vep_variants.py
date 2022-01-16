@@ -105,47 +105,33 @@ def main(args) -> None:
             req.raise_for_status()
             sys.exit()
 
-        ## TODO: See if you can simply iterate over a dictionary
-        decoded = req.json()
-        ## TODO: do not hard-code the filename
-        if not os.path.exists("datafile.json"):
-            ## TODO: simplify to using json.dump() directly
-            with open("datafile.json", "w", encoding='ascii') as file:
-                file.write(json.dumps(decoded, ensure_ascii=False, indent=4))
-
-        with open("datafile.json", 'r', encoding='ascii') as file:
-            data: Sequence[dict] = json.load(file)
-
-        consequences_list = []
+        data: Sequence[Any] = req.json()  # data is a list of many dictionaries which contain the data from ensembl
+        consequences_list: List = []  # we need it to have direct access to the whole value(dict)
+        assembled_dict: Any = {}
+        example_dict_list: List = []
         for i, item in enumerate(data):
-            example: Any = data[i]
-            # example['transcript_consequences']: Union[str, slice] = []
 
+            example: Dict = data[i]  # example is a dictionary
             example["transcript_consequences"] = [
                 item for item in example['transcript_consequences'] if isinstance(item, dict)
-            ]
+            ]       # change the value of thed dictionary to be a dictionary
+            example['significant_transcript_consequences'] = [
+                item for item in example['transcript_consequences'] if item['transcript_id'] == args[2]
+            ][0]       # item is a dict # get only the dictionaries that contain a specific value for transcript id key
 
-            example['significant_transcript_consequences'] = [item for item in example['transcript_consequences'] if item['transcript_id'] == 'ENST00000335295'][0]
             consequences_list.append(example['significant_transcript_consequences'])
+            # we need it to have direct access to the whole value(dict) to add it then to the original as keys and values
+            # put the dictionaries wanted in a list\
 
+            if not example.keys == 'regulatory_feature_consequences':
+                pass
+            else:
+                example['rf_cons'] = example['regulatory_feature_consequences'][0]  # to correct the format of the output.
 
-        ## TODO: Duplicating code from above?
-        pd.set_option('display.max_rows', None)
-        pd.set_option('display.max_columns', None)
-        pd.set_option('display.width', 1000)
-
-        reglist: List[List[Dict[str, Any]]] = []  # list of lists of one dictionary
-        ex_dict_list = []
-
-        for i, item in enumerate(data):
-            newexample = data[i]
-            # list(newexample['regulatory_feature_consequences'])
-            reglist.append(newexample['regulatory_feature_consequences'])
-            newexample['allele_string'] = [char for char in newexample['allele_string'] if char != '/']
-            newexample['Ref'] = [newexample['allele_string'][0]][0]
-            assembled_dict = {**newexample, **consequences_list[i], **reglist[i][0]}
-            ex_dict_list.append(assembled_dict)
-
+            example['allele_string'] = [char for char in example['allele_string'] if char != '/']
+            example['Ref'] = [example['allele_string'][0]][0]  # add a key to the dict (Reference Nuc)
+            assembled_dict = {**example, **consequences_list[i]}  # adding data to the dict
+            example_dict_list.append(assembled_dict)
 
         new = pd.DataFrame(
             ex_dict_list,
