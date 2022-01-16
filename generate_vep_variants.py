@@ -14,7 +14,6 @@ from corvus.cmd import get_cmd_output  # type: ignore
 
 ## TODO: annotate the return value
 def read_vcf(path: str):
-    ## TODO: VCF file is certainly not for (aligned) sequences :-)
     """
     Read a VCF file
     :param path: VCF file path
@@ -31,7 +30,6 @@ def read_vcf(path: str):
     ).rename(columns={'#CHROM': 'CHROM'})
 
 
-## TODO: pass the gene symbol
 def fetch_seq(symbol: str) -> None:
     """
     Get the DNA sequence of that symbol from Ensembl in a file formate
@@ -134,7 +132,7 @@ def main(args) -> None:
             example_dict_list.append(assembled_dict)
 
         new = pd.DataFrame(
-            ex_dict_list,
+            example_dict_list,
             columns=[
                'gene_symbol',
                'seq_region_name',
@@ -148,11 +146,21 @@ def main(args) -> None:
             ])
 
         new.rename(
-            columns={'seq_region_name': 'Chromosome', 'variant_allele': 'Alt', 'gene_symbol': 'Gene', 'start': 'Start',
-                     'end': 'End', 'strand': 'Strand', 'biotype': 'Biotype', 'impact': 'Impact'}, inplace=True)
-
-        new.to_csv('datafile11_new.csv', index=False)
-        pd.set_option('display.max_columns', 60)
+            columns={
+                'seq_region_name': 'Chromosome',
+                'variant_allele': 'Alt',
+                'gene_symbol': 'Gene',
+                'start': 'Start',
+                'end': 'End',
+                'strand': 'Strand',
+                'biotype': 'Biotype',
+                'impact': 'Impact'
+            },
+            inplace=True
+        )
+        
+        filename = f'data_file_{args[1]}.csv'
+        new.to_csv(filename, index=False)
         print(new)
 
 
