@@ -3,4 +3,3 @@ flake8
 mypy
 requests
 types-requests
-requests.exceptions
